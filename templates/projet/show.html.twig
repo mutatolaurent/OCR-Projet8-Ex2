@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du projet - TaskLinker{% endblock %}
+
+{% block body %}
+<main>
+    <header>
+        <div id="current-user"></div>
+        <div id="title-page">
+            <div class="flex-header">
+                <h1>{{ projet.nom }}</h1>
+                <div class="user-list">
+                    {% for employe in projet.employes %}
+                        {# 
+                        - employe.prenom|slice(0, 1) prend la 1ère lettre du prénom
+                        - employe.nom|slice(0, 1) prend la 1ère lettre du nom
+                        - |upper met le tout en majuscules
+                        #}
+                        {% set initialePrenom = employe.prenom|slice(0, 1)|upper %}
+                        {% set initialeNom = employe.nom|slice(0, 1)|upper %}
+                        
+                        <div class="avatar">{{ initialePrenom }}{{ initialeNom }}</div>
+                                        
+                    {% else %}
+                        <p>Aucun employé associé à ce projet.</p>
+                    {% endfor %}
+                </div>
+                <a class="button" href="projet-edit.html">Modifier</a>
+            </div>
+        </div>
+    </header>
+    <div id="content">
+        <div id="tasks-container">
+            <div class="task-column">
+                <h2>To Do</h2>
+                <div class="tasks-list">
+                    {% for tache in projet.taches|filter(t => t.statut.value == 'todo') %}
+                        {{ include('projet/_tache_carte.html.twig', { 'tache': tache }) }}
+                    {% endfor %}
+                    <a href="tache-add.html" class="task-add">
+                    + Ajouter une tâche
+                    </a>
+                </div>
+            </div>  
+            <div class="task-column">
+                <h2>Doing</h2>
+                <div class="tasks-list">
+                    {% for tache in projet.taches|filter(t => t.statut.value == 'doing') %}
+                        {{ include('projet/_tache_carte.html.twig', { 'tache': tache }) }}
+                    {% endfor %}
+                    <a href="tache-add.html" class="task-add">
+                    + Ajouter une tâche
+                    </a>
+                </div>
+            </div>  
+            <div class="task-column">
+                <h2>Done</h2>
+                <div class="tasks-list">
+                    {% for tache in projet.taches|filter(t => t.statut.value == 'done') %}
+                        {{ include('projet/_tache_carte.html.twig', { 'tache': tache }) }}
+                    {% endfor %}
+                    <a href="tache-add.html" class="task-add">
+                    + Ajouter une tâche
+                    </a>
+                </div>
+            </div>  
+        </div>
+    </div>
+</main>
+{% endblock %}

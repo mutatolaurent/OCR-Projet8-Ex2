@@ -25,4 +25,21 @@ return [
     '@hotwired/turbo' => [
         'version' => '8.0.23',
     ],
+    'jquery' => [
+        'version' => '4.0.0',
+    ],
+    '@fortawesome/fontawesome-free' => [
+        'version' => '7.2.0',
+    ],
+    'select2' => [
+        'version' => '4.1.0',
+    ],
+    'select2/dist/css/select2.min.css' => [
+        'version' => '4.1.0',
+        'type' => 'css',
+    ],
+    '@fortawesome/fontawesome-free/css/all.min.css' => [
+        'version' => '7.2.0',
+        'type' => 'css',
+    ],
 ];

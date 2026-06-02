@@ -1,0 +1,18 @@
+<a class="task" href="tache-add.html">
+    <h3>{{ tache.titre }}</h3>
+    <p>{{ tache.description }}</p>
+    
+    <div class="task-infos">
+        {% if tache.date %}
+            <div class="task-deadline">
+                <i class="fa-regular fa-calendar"></i> {{ tache.date|date('d/m/Y') }}
+            </div>
+        {% endif %}
+        
+        {% if tache.employe %}
+            <div class="mini-user">
+                {{ tache.employe.prenom|slice(0, 1)|upper }}{{ tache.employe.nom|slice(0, 1)|upper }}
+            </div>
+        {% endif %}
+    </div>
+</a>
