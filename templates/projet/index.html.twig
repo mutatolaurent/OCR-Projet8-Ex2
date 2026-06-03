@@ -18,7 +18,7 @@
                         <h2>{{ projet.nom }}</h2>
                         </a>
                         <div class="card-project-icons">
-                            <a href="projet-edit.html"><i class="fa-solid fa-pen"></i></a>
+                            <a href="{{ path('app_projet_edit', {id: projet.id}) }}"><i class="fa-solid fa-pen"></i></a>
                             <a href="#"><i class="fa-solid fa-trash"></i></a>
                         </div>
                     </article>
@@ -26,7 +26,7 @@
                     <p>Aucun projet trouvé</p>
                 {% endfor %}
                 <article class="card-project">
-                    <a href="projet-add.html">
+                    <a href="{{ path('app_projet_add')}}">
                         <i class="fa-solid fa-circle-plus add-project-icon"></i>
                         <h2>Ajouter un projet</h2>
                     </a>

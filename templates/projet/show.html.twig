@@ -25,7 +25,7 @@
                         <p>Aucun employé associé à ce projet.</p>
                     {% endfor %}
                 </div>
-                <a class="button" href="projet-edit.html">Modifier</a>
+                <a class="button" href="{{ path('app_projet_edit', {id: projet.id}) }}">Modifier</a>
             </div>
         </div>
     </header>

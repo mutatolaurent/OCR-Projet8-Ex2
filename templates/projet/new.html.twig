@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du projet - TaskLinker{% endblock %}
+
+{% block body %}
+<main>
+<header>
+    <div id="current-user"></div>
+    <div id="title-page">
+        <h1>Nouveau projet</h1>
+    </div>
+</header>
+<div id="content">
+    {{ form_start(form) }}
+        <div>
+            {{ form_row(form.nom, {label: 'Titre du projet'}) }}
+        </div>
+        <div>
+            {{ form_row(form.employes, {
+                'label': 'Employés assignés',
+                'attr': { 'data-controller': 'select' }
+                }) 
+            }}
+        </div>
+        <br>
+        {{ form_rest(form) }}
+        <button class="button button-submit">Continuer</button>
+    {{ form_end(form) }}
+</div>
+</main>
+{% endblock %}

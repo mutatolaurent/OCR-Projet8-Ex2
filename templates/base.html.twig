@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}TaskLinker{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         {% block stylesheets %}
         {% endblock %}
 
@@ -13,25 +14,27 @@
 
     </head>
     <body>
-    <div id="main-container">
-        <nav>
-            <a href="{{ path('app_projet_index') }}" id="logo">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
-            </a>
-            <ul id="main-menu">
-                <li class="active">
-                    <a href="{{ path('app_projet_index') }}">
-                        <i class="fa-solid fa-list-check"></i> Projets
-                    </a>
-                </li>
-                <li>    
-                    <a href="{{ path('app_projet_index') }}">
-                        <i class="fa-regular fa-user"></i> Équipe
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        {% block body %}{% endblock %}
-    </div>
+        <div id="main-container">
+            <nav>
+                <a href="{{ path('app_projet_index') }}" id="logo">
+                <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
+                </a>
+                <ul id="main-menu">
+                    <li class="active">
+                        <a href="{{ path('app_projet_index') }}">
+                            <i class="fa-solid fa-list-check"></i> Projets
+                        </a>
+                    </li>
+                    <li>    
+                        <a href="{{ path('app_projet_index') }}">
+                            <i class="fa-regular fa-user"></i> Équipe
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            {% block body %}{% endblock %}
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     </body>
 </html>
