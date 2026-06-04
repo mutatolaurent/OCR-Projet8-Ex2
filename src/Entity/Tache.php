@@ -32,7 +32,7 @@ class Tache
     private ?Employe $Employe = null;
 
     #[ORM\Column(enumType: StatutTache::class)]
-    private ?StatutTache $Statut = null;
+    private ?StatutTache $statut = null;
 
     public function getId(): ?int
     {
@@ -101,12 +101,12 @@ class Tache
 
     public function getStatut(): ?StatutTache
     {
-        return $this->Statut;
+        return $this->statut;
     }
 
-    public function setStatut(StatutTache $Statut): static
+    public function setStatut(StatutTache $statut): static
     {
-        $this->Statut = $Statut;
+        $this->statut = $statut;
 
         return $this;
     }

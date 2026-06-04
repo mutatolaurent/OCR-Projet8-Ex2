@@ -34,7 +34,7 @@ class Employe
     /**
      * @var Collection<int, Projet>
      */
-    #[ORM\ManyToMany(targetEntity: Projet::class, mappedBy: 'Employe')]
+    #[ORM\ManyToMany(targetEntity: Projet::class, mappedBy: 'employes')]
     private Collection $projets;
 
     /**

@@ -37,7 +37,7 @@
                     {% for tache in projet.taches|filter(t => t.statut.value == 'todo') %}
                         {{ include('projet/_tache_carte.html.twig', { 'tache': tache }) }}
                     {% endfor %}
-                    <a href="tache-add.html" class="task-add">
+                    <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
                     + Ajouter une tâche
                     </a>
                 </div>
@@ -48,7 +48,7 @@
                     {% for tache in projet.taches|filter(t => t.statut.value == 'doing') %}
                         {{ include('projet/_tache_carte.html.twig', { 'tache': tache }) }}
                     {% endfor %}
-                    <a href="tache-add.html" class="task-add">
+                    <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
                     + Ajouter une tâche
                     </a>
                 </div>
@@ -59,7 +59,7 @@
                     {% for tache in projet.taches|filter(t => t.statut.value == 'done') %}
                         {{ include('projet/_tache_carte.html.twig', { 'tache': tache }) }}
                     {% endfor %}
-                    <a href="tache-add.html" class="task-add">
+                    <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
                     + Ajouter une tâche
                     </a>
                 </div>

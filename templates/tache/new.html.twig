@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TacheController!{% endblock %}
+
+{% block body %}
+
+<main>
+<header>
+    <div id="current-user"></div>
+    <div id="title-page">
+        <h1>{% if isEdit %}
+                Modifier la tâche
+            {% else %}
+                Créer une tâche
+            {% endif %}
+        </h1>
+    </div>
+</header>
+<div id="content">
+    {{ form_start(form) }}
+        <div>
+        {{ form_row(form.titre, {label: 'Titre de la tâche'}) }}
+        </div>
+        <div>
+        {{ form_row(form.description, {label: 'Description'}) }}
+        </div>
+        <div class="flex-form">
+            <div>
+                {{ form_row(form.date, {label: 'Date'}) }}
+            </div>
+            <div>
+                {{ form_row(form.statut, {label: 'Statut'}) }}
+            </div>
+        </div>
+        <div>
+            {{ form_row(form.employe, {label: 'Membre'}) }}
+        </div>
+        <br>
+        {{ form_rest(form) }}
+        <button class="button button-submit">
+            {% if isEdit %}
+                Modifier
+            {% else %}
+                Ajouter
+            {% endif %}
+        </button>
+        {% if isEdit %}
+            <a href="#" class="delete-task">Supprimer la tâche</a>
+        {% endif %}
+    {{ form_end(form) }}
+</div>
+</main>
+
+{% endblock %}
