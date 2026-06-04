@@ -7,10 +7,16 @@
 <header>
     <div id="current-user"></div>
     <div id="title-page">
-        <h1>Nouveau projet</h1>
+        <h1>{% if isEdit %}
+                Modifier le projet
+            {% else %}
+                Nouveau projet
+            {% endif %}
+        </h1>
     </div>
 </header>
 <div id="content">
+    <div>{{ form_errors(form) }}</div>
     {{ form_start(form) }}
         <div>
             {{ form_row(form.nom, {label: 'Titre du projet'}) }}

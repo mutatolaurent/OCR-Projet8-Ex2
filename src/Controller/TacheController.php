@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Tache;
 use App\Entity\Projet;
 use App\Form\TacheType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class TacheController extends AbstractController
 {
@@ -22,14 +23,26 @@ final class TacheController extends AbstractController
     }
 
     #[Route('/tache/{id}/edit', name: 'app_tache_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(Tache $tache, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(?Tache $tache, Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        // Si la tâche n'existe pas en base de données
+        if (!$tache) {
+            throw new NotFoundHttpException("La tâche demandée n'existe pas.");
+        }
+
         return $this->handleForm($tache, $request, $entityManager);
     }
 
     #[Route('/projet/{id}/tache/ajout', name: 'app_tache_add', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function add(Projet $projet, Request $request, EntityManagerInterface $entityManager): Response
+    public function add(?Projet $projet, Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        // Si le projet n'existe pas en base de données
+        if (!$projet) {
+            throw new NotFoundHttpException("Le projet demandé n'existe pas.");
+        }
+
         $tache = new Tache();
         $tache->setProjet($projet);
 
@@ -53,8 +66,7 @@ final class TacheController extends AbstractController
 
         return $this->render('tache/new.html.twig', [
             'form' => $form,
-            'projet' => $tache->getProjet(),
-            'isEdit' => $tache->getId() !== null // Pratique pour le titre dans Twig
+            'isEdit' => $tache->getId() !== null // Permet au template de savoir si on est en création ou en édition pour adapter le titre et le bouton du formulaire
         ]);
     }
 

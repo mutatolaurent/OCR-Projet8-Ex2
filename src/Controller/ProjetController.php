@@ -11,6 +11,7 @@ use App\Form\ProjetType;
 use App\Repository\ProjetRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormError;
 
 final class ProjetController extends AbstractController
 {
@@ -43,16 +44,64 @@ final class ProjetController extends AbstractController
     #[Route('/projet/{id}/edit', name: 'app_projet_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function new(?Projet $projet, Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        // Si on est sur la route /edit mais que l'ID ne correspond à rien
+        if ($request->attributes->get('_route') === 'app_projet_edit' && null === $projet) {
+            throw new NotFoundHttpException("Le projet demandé n'existe pas.");
+        }
+
+        // Permet de savoir si on est en édition ou en création
+        $isEdit = (null !== $projet);
+
         // Création de l'objet Projet et du formulaire associé
         if (null === $projet) {
             $projet = new Projet();
             $projet->setArchive(0); // Par défaut, un projet n'est pas archivé à sa création
         }
 
-        $form = $this->createForm(ProjetType::class, $projet);
+        // 1. CLONAGE DE SÉCURITÉ (Uniquement en mode édition)
+        // On garde en mémoire la liste des employés AVANT la soumission du formulaire
+        $employesAvantSoumission = [];
+        if ($isEdit) {
+            // On crée un tableau figé des employés actuellement dans le projet
+            $employesAvantSoumission = $projet->getEmployes()->toArray();
+        }
 
-        // Gestion de la soumission du formulaire et redirection vers la HP si tout est OK
+        // Création du formulaire et traitement de la requête
+        $form = $this->createForm(ProjetType::class, $projet);
         $form->handleRequest($request);
+
+        // 2. VÉRIFICATION DES RÈGLES MÉTIER APRÈS SOUMISSION
+        if ($form->isSubmitted() && $isEdit) {
+
+            // On récupère la liste des employés qui vient d'être saisie dans le formulaire
+            $employesApresSoumission = $projet->getEmployes()->toArray();
+
+            // On cherche les employés qui ont été RETIRÉS (présents avant, mais plus après)
+            foreach ($employesAvantSoumission as $employeId => $employe) {
+                if (!in_array($employe, $employesApresSoumission, true)) {
+
+                    // L'employé a été retiré, vérifions s'il a des tâches sur ce projet
+                    foreach ($projet->getTaches() as $tache) {
+                        if ($tache->getEmploye() === $employe) {
+                            // L'employé est encore assigné à au moins une tâche de ce projet !
+                            // On ajoute une erreur globale au formulaire
+                            $form->addError(new FormError(sprintf(
+                                'Impossible de retirer l’employé "%s %s" car il est encore affecté à la tâche "%s" de ce projet.',
+                                $employe->getPrenom(),
+                                $employe->getNom(),
+                                $tache->getTitre()
+                            )));
+
+                            break; // Inutile de vérifier les autres tâches pour cet employé
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3. VALIDATION ET ENREGISTREMENT
+        // Si la boucle au-dessus a ajouté un "FormError", $form->isValid() renverra automatiquement FALSE !
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($projet);
             $entityManager->flush();
@@ -62,6 +111,7 @@ final class ProjetController extends AbstractController
         // Affichage de la vue du formulaire
         return $this->render('projet/new.html.twig', [
             'form' => $form,
+            'isEdit' => $isEdit, // Permet au template de savoir si on est en création ou en édition pour adapter le titre et le bouton du formulaire
         ]);
     }
 
