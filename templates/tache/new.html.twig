@@ -45,7 +45,7 @@
             {% endif %}
         </button>
         {% if isEdit %}
-            <a href="#" class="delete-task">Supprimer la tâche</a>
+            <a href="{{ path('app_tache_remove', {id: tacheId}) }}" data-turbo-prefetch="false" class="delete-task">Supprimer la tâche</a>
         {% endif %}
     {{ form_end(form) }}
 </div>

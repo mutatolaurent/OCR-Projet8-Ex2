@@ -6,6 +6,7 @@ use App\Repository\ProjetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
 class Projet
@@ -16,6 +17,11 @@ class Projet
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le titre est obligatoire.")]
+    #[Assert\Length(
+        min: 2,
+        minMessage: "Le titre doit faire au moins {{ limit }} caractères."
+    )]
     private ?string $nom = null;
 
     #[ORM\Column]
@@ -25,6 +31,7 @@ class Projet
      * @var Collection<int, Employe>
      */
     #[ORM\ManyToMany(targetEntity: Employe::class, inversedBy: 'projets')]
+    #[Assert\NotBlank(message: "Au moins un employé doit être affecté au projet.")]
     private Collection $employes;
 
     /**
@@ -87,7 +94,7 @@ class Projet
 
     public function removeEmploye(Employe $employe): static
     {
-        $this->Employes->removeElement($employe);
+        $this->employes->removeElement($employe);
 
         return $this;
     }

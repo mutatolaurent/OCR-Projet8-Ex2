@@ -31,7 +31,9 @@ class TacheType extends AbstractType
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('statut', EnumType::class, ['class' => StatutTache::class])
+            ->add('statut', EnumType::class, ['class' => StatutTache::class, 'choice_label' => function (StatutTache $choice) {
+                return $choice->getLabel();
+            },])
             // ->add('Projet', EntityType::class, [
             //     'class' => Projet::class,
             //     'choice_label' => 'id',
