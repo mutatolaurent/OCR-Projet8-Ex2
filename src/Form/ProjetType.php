@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Doctrine\ORM\EntityRepository;
 
 class ProjetType extends AbstractType
 {
@@ -25,6 +26,13 @@ class ProjetType extends AbstractType
                     return $employe->getPrenom() . ' ' . $employe->getNom();
                 },
                 'multiple' => true,
+                'required' => false,
+                // AJOUT DU QUERY BUILDER POUR LE TRI GLOBAL
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                    ->orderBy('e.prenom', 'ASC')
+                    ->addOrderBy('e.nom', 'ASC');
+                },
             ])
         ;
     }

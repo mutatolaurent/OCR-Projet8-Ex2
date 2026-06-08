@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche Employé{% endblock %}
+
+{% block body %}
+<main>
+<header>
+    <div id="current-user"></div>
+    <div id="title-page">
+        <h1>
+            {% if isEdit %}
+                {{ form.prenom.vars.value }} {{ form.nom.vars.value }}
+            {% else %}
+                Nouvel(le) employé(e)
+            {% endif %}
+        </h1>
+    </div>
+</header>
+<div id="content">
+    {{ form_start(form) }}
+        <div>{{ form_row(form.nom, {label: 'Nom'}) }}</div>
+        <div>{{ form_row(form.prenom, {label: 'Prenom'}) }}</div>
+        <div>{{ form_row(form.email, {label: 'Email'}) }}</div>
+        <div class="form-flex">
+            <div>{{ form_row(form.dateEntree, {label: "Date d'entrée"}) }}</div>
+            <div>{{ form_row(form.statut, {label: 'Statut'}) }}</div>
+        </div>
+        <button class="button button-submit">Enregistrer</button>
+    {{ form_end(form) }}   
+    </div>
+</main>
+
+
+{% endblock %}

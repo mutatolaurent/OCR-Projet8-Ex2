@@ -31,7 +31,6 @@ class Projet
      * @var Collection<int, Employe>
      */
     #[ORM\ManyToMany(targetEntity: Employe::class, inversedBy: 'projets')]
-    #[Assert\NotBlank(message: "Au moins un employé doit être affecté au projet.")]
     private Collection $employes;
 
     /**

@@ -55,6 +55,7 @@ final class ProjetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($projet);
             $entityManager->flush();
+
             return $this->redirectToRoute('app_projet_show', ['id' => $projet->getId()]);
         }
 
@@ -106,6 +107,7 @@ final class ProjetController extends AbstractController
                                 $employe->getNom(),
                                 $tache->getTitre()
                             )));
+                            $this->addFlash('error', 'Impossible de retirer cet employé car il est encore affecté à une tâche de ce projet.');
 
                             break; // Inutile de vérifier les autres tâches pour cet employé
                         }
@@ -119,6 +121,7 @@ final class ProjetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($projet);
             $entityManager->flush();
+            $this->addFlash('success', 'Le projet a bien été modifié.');
             return $this->redirectToRoute('app_projet_show', ['id' => $projet->getId()]);
         }
 
@@ -164,7 +167,7 @@ final class ProjetController extends AbstractController
         $manager->flush();
 
         // Petit message flash pour avertir l'utilisateur (optionnel mais recommandé !)
-        // $this->addFlash('success', 'Le projet a bien été archivé.');
+        $this->addFlash('success', 'Le projet a bien été archivé.');
 
         // redirection vers la HP
         return $this->redirectToRoute('app_projet_index');

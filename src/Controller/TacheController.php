@@ -78,6 +78,9 @@ final class TacheController extends AbstractController
         $manager->remove($tache);
         $manager->flush();
 
+        // Petit message flash pour avertir l'utilisateur
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
+
         // redirection vers la HP
         return $this->redirectToRoute('app_projet_show', ['id' => $projetId]);
     }
@@ -85,14 +88,19 @@ final class TacheController extends AbstractController
     // LA MÉTHODE MUTUALISÉE POUR LE FORMULAIRE
     private function handleForm(Tache $tache, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $isEdit = $tache->getId() !== null;
+
         $form = $this->createForm(TacheType::class, $tache, [
             'projet' => $tache->getProjet() // On passe l'objet Projet récupéré par la route
         ]);
-        $form->handleRequest($request);
 
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($tache);
             $entityManager->flush();
+
+            // Petit message flash pour avertir l'utilisateur (optionnel mais recommandé !)
+            $this->addFlash('success', 'La tâche a bien été '.($isEdit ? ' modifiée' : 'enregistrée').'.');
 
             return $this->redirectToRoute('app_projet_show', ['id' => $tache->getProjet()->getId()]);
         }
@@ -100,7 +108,7 @@ final class TacheController extends AbstractController
         return $this->render('tache/new.html.twig', [
             'form' => $form,
             'tacheId' => $tache->getId(),
-            'isEdit' => $tache->getId() !== null // Permet au template de savoir si on est en création ou en édition pour adapter le titre et le bouton du formulaire
+            'isEdit' => $isEdit // Permet au template de savoir si on est en création ou en édition pour adapter le titre et le bouton du formulaire
         ]);
     }
 

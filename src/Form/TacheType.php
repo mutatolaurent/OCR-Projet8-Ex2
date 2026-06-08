@@ -45,13 +45,14 @@ class TacheType extends AbstractType
                     return $employe->getPrenom() . ' ' . $employe->getNom();
                 },
                 'multiple' => false,
-                //
+                'required' => false,
+                'placeholder' => 'Choisir un employé (optionnel)',
                 'query_builder' => function (EntityRepository $er) use ($projet) {
                     return $er->createQueryBuilder('e')
                         ->join('e.projets', 'p') // On fait une jointure avec la table des projets pour filtrer les employés associés au projet en cours
                         ->where('p.id = :projetId') // On ajoute une condition pour ne récupérer que les employés liés au projet passé en option
                         ->setParameter('projetId', $projet ? $projet->getId() : null) //
-                        ->orderBy('e.nom', 'ASC'); // Tri optionnel par nom d'employé
+                        ->orderBy('e.prenom', 'ASC'); // Tri par nom d'employé
                 },
             ]);
     }

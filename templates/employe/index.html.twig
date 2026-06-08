@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des employés{% endblock %}
+
+{% block body %}
+<main>
+<header>
+    <div id="current-user"></div>
+    <div id="title-page">
+        <div class="flex-header">
+            <h1>Équipe</h1>
+                <a class="button" href="{{ path('app_employe_add') }}">Ajouter</a>
+        </div>
+    </div>
+
+</header>
+<div id="content">
+    <table id="team-container">
+        <thead>
+            <tr>
+            <th>Prénom, Nom</th>
+            <th>Statut</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employe in employes %}
+                <tr>
+                <td>
+                    <div class="employee-infos">
+                        <div class="employee-avatar">
+                            {% set initialePrenom = employe.prenom|slice(0, 1)|upper %}
+                            {% set initialeNom = employe.nom|slice(0, 1)|upper %}
+                            {{ initialePrenom }}{{ initialeNom }}
+                        </div>
+                        <div class="employee-coords">
+                            <strong>{{ employe.prenom }} {{ employe.nom }}</strong>
+                            <span>{{ employe.email }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ employe.statut.value|upper }} </td>
+                <td> 
+                    <a class="button button-edit-team" href="{{ path('app_employe_edit', {id: employe.id} ) }}">
+                    Éditer
+                    </a>
+                    <a class="delete-team" href="{{ path('app_employe_remove', {id: employe.id} ) }}">
+                    Supprimer
+                    </a>
+                </td>
+                </tr>
+            {% else %}
+                <p>Aucun employé trouvé</p>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</main>
+
+{% endblock %}

@@ -20,18 +20,41 @@
                 <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
                 </a>
                 <ul id="main-menu">
-                    <li class="active">
+                    {# L'onglet est actif si la route commence par 'app_projet' OU par 'app_tache' #}
+                    {% set route = app.request.attributes.get('_route') %}
+                    <li class="{{ route starts with 'app_projet' or route starts with 'app_tache' ? 'active' : '' }}">
                         <a href="{{ path('app_projet_index') }}">
                             <i class="fa-solid fa-list-check"></i> Projets
                         </a>
                     </li>
-                    <li>    
-                        <a href="{{ path('app_projet_index') }}">
+                    {# On vérifie si la route actuelle commence par 'app_employe' #}
+                    <li class="{{ route starts with 'app_employe' starts with 'app_employe' ? 'active' : '' }}">    
+                        <a href="{{ path('app_employe') }}">
                             <i class="fa-regular fa-user"></i> Équipe
                         </a>
                     </li>
                 </ul>
+
+                {# Zone d'affichage des messages de feedback #}
+                <div class="flash-messages">
+                    {# On boucle sur tous les messages flash de type 'success' #}
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            <i class="fa-solid fa-circle-check"></i>{{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {# On boucle sur tous les messages flash de type 'error' #}
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger">
+                            <i class="fa-solid fa-circle-xmark"></i>{{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
             </nav>
+
+           
+
             {% block body %}{% endblock %}
         </div>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
