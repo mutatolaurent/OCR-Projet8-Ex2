@@ -84,7 +84,7 @@ final class EmployeController extends AbstractController
     public function remove(?Employe $employe, EntityManagerInterface $manager): Response
     {
 
-        // Si l'employé n'existe pas en base de données on redirige vers la HP
+        // Si l'employé n'existe pas en base de données on redirige vers la HP employé
         if (!$employe) {
             return $this->redirectToRoute('app_employe');
         }

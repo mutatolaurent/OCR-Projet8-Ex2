@@ -30,6 +30,7 @@ class TacheType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
+                'attr' => ['min' => '2020-01-01', 'max' => '2030-12-31'] // Ajoute des contraintes HTML5 pour la date mais pas côté serveur
             ])
             ->add('statut', EnumType::class, ['class' => StatutTache::class, 'choice_label' => function (StatutTache $choice) {
                 return $choice->getLabel();

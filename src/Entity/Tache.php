@@ -34,6 +34,8 @@ class Tache
 
     #[ORM\Column]
     #[Assert\NotBlank(message: "La date est obligatoire.")]
+    #[Assert\GreaterThanOrEqual('2020-01-01')]
+    #[Assert\LessThanOrEqual('2030-12-31')]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'taches')]

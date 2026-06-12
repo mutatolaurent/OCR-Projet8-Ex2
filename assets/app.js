@@ -3,10 +3,10 @@ import "./styles/style.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "select2/dist/css/select2.min.css";
 
+//import "./js/select.js";
+
 import "./stimulus_bootstrap.js";
 
-// 3. script personnalisé (qui initialise select2 par exemple)
-//import "./js/select.js";
 /*
  * Welcome to your app's main JavaScript file
  *

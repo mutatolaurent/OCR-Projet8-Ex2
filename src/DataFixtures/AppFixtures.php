@@ -34,19 +34,19 @@ class AppFixtures extends Fixture
         });
 
         // 3. On boucle sur les projets créés pour leur ajouter les tâches !
-        // À ce stade, les projets ont un ID, ils existent, tout est stable.
+        // À ce stade, les projets ont un ID, ils existent
         foreach ($projets as $projet) {
 
             // On récupère les employés spécifiquement associés à CE projet
-            $employesDuProjet = $projet->getEmploye()->toArray();
+            $employesDuProjet = $projet->getEmployes()->toArray();
 
             $nombreDeTaches = $faker->numberBetween(3, 4);
 
             TacheFactory::createMany($nombreDeTaches, function () use ($employesDuProjet, $projet) {
                 $cleEmploye = array_rand($employesDuProjet);
 
-                // // C'est ici qu'on initialise les relations Tache Employe et Tache Projet
-                // Doctrine va créer les ckés étrangères
+                // C'est ici qu'on initialise les relations Tache Employe et Tache Projet
+                // Doctrine va créer les clés étrangères
                 return [
                     'projet'  => $projet,
                     'employe' => $employesDuProjet[$cleEmploye],

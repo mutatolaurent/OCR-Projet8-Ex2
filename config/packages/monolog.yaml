@@ -1,15 +1,23 @@
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+        - routing # On déclare notre canal personnalisé ici
 
 when@dev:
     monolog:
         handlers:
+            # On ajoute notre handler rotatif dédié au routage
+            routing_handler:
+                type: rotating_file
+                path: "%kernel.logs_dir%/routing.log"
+                level: info
+                channels: ["routing"]
+                max_files: 30
             main:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-                channels: ["!event"]
+                channels: ["!event", "!routing"]
             console:
                 type: console
                 process_psr_3_messages: false
