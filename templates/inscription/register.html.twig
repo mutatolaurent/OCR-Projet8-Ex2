@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire d'inscription{% endblock %}
+
+{% block body %}
+<main>
+    <div id="content">
+        {{ form_start(form) }}
+            <div>{{ form_row(form.nom, {label: 'Nom'}) }}</div>
+            <div>{{ form_row(form.prenom, {label: 'Prenom'}) }}</div>
+            <div>{{ form_row(form.email, {label: 'Email'}) }}</div>
+            <div>{{ form_row(form.password, {label: 'Mot de passe'}) }}</div>
+            <button class="button button-submit">Continuer</button>
+        {{ form_end(form) }}   
+    </div>
+</main>
+
+{% endblock %}

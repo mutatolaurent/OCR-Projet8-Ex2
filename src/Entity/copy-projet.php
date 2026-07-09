@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
-class Projet
+class CopyProjet
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,6 +27,11 @@ class Projet
     #[ORM\Column]
     private ?bool $archive = null;
 
+    /**
+     * @var Collection<int, Employe>
+     */
+    #[ORM\ManyToMany(targetEntity: Employe::class, inversedBy: 'projets')]
+    private Collection $employes;
 
     /**
      * @var Collection<int, Tache>
@@ -34,17 +39,10 @@ class Projet
     #[ORM\OneToMany(targetEntity: Tache::class, mappedBy: 'Projet', orphanRemoval: true)]
     private Collection $taches;
 
-    /**
-     * @var Collection<int, Employe>
-     */
-    #[ORM\ManyToMany(targetEntity: Employe::class, inversedBy: 'projets')]
-    private Collection $employes;
-
-
     public function __construct()
     {
-        $this->taches = new ArrayCollection();
         $this->employes = new ArrayCollection();
+        $this->taches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +74,29 @@ class Projet
         return $this;
     }
 
+    /**
+     * @return Collection<int, Employe>
+     */
+    public function getEmployes(): Collection
+    {
+        return $this->employes;
+    }
+
+    public function addEmploye(Employe $employe): static
+    {
+        if (!$this->employes->contains($employe)) {
+            $this->employes->add($employe);
+        }
+
+        return $this;
+    }
+
+    public function removeEmploye(Employe $employe): static
+    {
+        $this->employes->removeElement($employe);
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, Tache>
@@ -103,30 +124,6 @@ class Projet
                 $tach->setProjet(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Employe>
-     */
-    public function getEmployes(): Collection
-    {
-        return $this->employes;
-    }
-
-    public function addEmploye(Employe $employe): static
-    {
-        if (!$this->employes->contains($employe)) {
-            $this->employes->add($employe);
-        }
-
-        return $this;
-    }
-
-    public function removeEmploye(Employe $employe): static
-    {
-        $this->employes->removeElement($employe);
 
         return $this;
     }

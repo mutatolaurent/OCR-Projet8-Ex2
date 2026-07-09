@@ -21,6 +21,16 @@ div#main-container {
     min-height: 100vh;
 }
 
+div#logout-container {
+    background-image: url("../img/bck.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+}
+
 nav {
     width: 300px;
     flex-grow: 0;
@@ -29,8 +39,70 @@ nav {
     padding: 50px 15px;
 }
 
+nav.logout {
+    width: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background: none;
+    padding: 52px 0px 0px 52px;
+}
+
 main {
     flex: 1;
+}
+
+main.logout-main {
+    display: flex;
+    justify-content: center; /* Centre sur l'axe horizontal */
+    align-items: center; /* Centre sur l'axe vertical */
+}
+
+.logout-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre sur l'axe vertical */
+    width: 710px;
+    height: 724px;
+    border-radius: 30px;
+    background: var(--Vert-deau, #4d8077);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.03);
+}
+
+.logout-box h1 {
+    color: #fff;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 34px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 147px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.logout-box h2 {
+    color: #fff;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 24px;
+    margin-bottom: 80px;
+}
+
+.logout-box h3 {
+    color: #fff;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    margin: 0px 24px 0px 24px;
 }
 
 .alert-success {
@@ -254,6 +326,45 @@ div#projects-container {
     letter-spacing: 0em;
     text-align: center;
     text-decoration: none;
+}
+
+.button-1 {
+    width: 224px;
+    height: 74px;
+    margin-top: 32px;
+    padding: 25px 148px;
+    justify-content: center;
+    gap: 10px;
+    background: var(--Vert-fonc, #1c5b50);
+    color: #fff;
+    font-style: normal;
+    white-space: nowrap;
+}
+
+.button-2 {
+    width: 224px;
+    height: 74px;
+    margin-top: 32px;
+    padding: 25px 148px;
+    justify-content: center;
+    gap: 10px;
+    background: var(--Vert-amande, #b1d89d);
+    color: var(--Vert-deau, #4d8077);
+    font-style: normal;
+    white-space: nowrap;
+}
+
+.separator {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 38px;
+}
+
+.separator span {
+    width: 139px;
+    height: 1px;
+    background: #fff;
 }
 
 div#tasks-container {
