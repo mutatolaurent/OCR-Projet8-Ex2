@@ -263,6 +263,13 @@ header {
 
 div#current-user {
     height: 55px;
+    display: flex;
+    justify-content: right;
+    text-decoration: none;
+}
+
+div#current-user a {
+    text-decoration: none;
 }
 
 div#title-page h1 {
@@ -392,6 +399,19 @@ div#projects-container {
     border: 1px solid lightgray;
 }
 
+.avatar-user {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #1c5b50;
+    border: 1px solid lightgray;
+    font-weight: 700;
+    line-height: 24px;
+}
 .user-list {
     display: flex;
     color: #fff;

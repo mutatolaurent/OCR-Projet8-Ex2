@@ -1,0 +1,12 @@
+{% if app.user %}
+    {% set initialePrenom = app.user.prenom|slice(0, 1)|upper %}
+    {% set initialeNom = app.user.nom|slice(0, 1)|upper %}   
+    
+    <div id="current-user">
+        <a href="{{ path('app_logout') }}">
+            <div class="avatar-user">{{ initialePrenom }}{{ initialeNom }}</div>
+        </a>         
+    </div>
+{% else %}
+    <div id="current-user"></div>
+{% endif %}
