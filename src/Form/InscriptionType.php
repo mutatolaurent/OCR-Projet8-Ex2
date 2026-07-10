@@ -25,7 +25,7 @@ class InscriptionType extends AbstractType
             'options' => ['attr' => ['class' => 'password-field']],
             'required' => true,
             'first_options'  => ['label' => 'Mot de passe'],
-            'second_options' => ['label' => 'Répéter le mot de passe'],
+            'second_options' => ['label' => 'Confirmation mot de passe'],
         ]);
     }
 

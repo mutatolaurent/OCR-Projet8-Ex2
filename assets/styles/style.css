@@ -105,10 +105,98 @@ main.logout-main {
     margin: 0px 24px 0px 24px;
 }
 
+.register-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre sur l'axe vertical */
+    width: 710px;
+    height: 859px;
+    border-radius: 30px;
+    background: var(--Vert-deau, #4d8077);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.03);
+}
+
+.connexion-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre sur l'axe vertical */
+    width: 710px;
+    height: 698px;
+    border-radius: 30px;
+    background: var(--Vert-deau, #4d8077);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.03);
+}
+
+.register-box h1,
+.connexion-box h1 {
+    color: #fff;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 34px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 52px;
+    margin-bottom: 47px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.connexion-box h1 {
+    margin-top: 110px;
+}
+
+.register-box label,
+.connexion-box label {
+    color: #fff;
+    font-family: Manrope;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.register-box a,
+.connexion-box a {
+    color: #fff;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+    margin-top: 24px;
+}
+
+.connexion-box label {
+    color: #fff;
+    font-family: Manrope;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
 .alert-success {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
+}
+
+.alert-fail {
+    color: red;
+    text-align: center;
+    font-family: Manrope;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .alert {
@@ -329,7 +417,7 @@ div#projects-container {
 }
 
 .button-1 {
-    width: 224px;
+    width: 310px;
     height: 74px;
     margin-top: 32px;
     padding: 25px 148px;
@@ -339,6 +427,12 @@ div#projects-container {
     color: #fff;
     font-style: normal;
     white-space: nowrap;
+    border: none;
+}
+
+.button-1-margintop {
+    width: 100%;
+    margin-top: 47px;
 }
 
 .button-2 {
