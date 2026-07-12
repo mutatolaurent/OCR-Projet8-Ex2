@@ -11,7 +11,9 @@ use App\Repository\EmployeRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EmployeType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[isGranted('IS_AUTHENTICATED')]
 final class EmployeController extends AbstractController
 {
     #[Route('/employe', name: 'app_employe')]
@@ -26,6 +28,7 @@ final class EmployeController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/employe/{id}/edit', name: 'app_employe_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(?Employe $employe, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -51,6 +54,7 @@ final class EmployeController extends AbstractController
 
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/employe/ajout', name: 'app_employe_add', methods: ['GET','POST'])]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -79,7 +83,7 @@ final class EmployeController extends AbstractController
         ]);
     }
 
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/employe/{id}/supprimer', name: 'app_employe_remove', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function remove(?Employe $employe, EntityManagerInterface $manager): Response
     {

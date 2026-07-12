@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Projet;
+use App\Entity\Employe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,18 @@ class ProjetRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // Récupère les projets non archivés pour un employé donné
+    public function findNonArchivedProjectsForEmploye(Employe $employe): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.employes', 'e')
+            ->andWhere('e.id = :employeId')
+            ->andWhere('p.archive = :archive')
+            ->setParameter('employeId', $employe->getId())
+            ->setParameter('archive', false)
+            ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

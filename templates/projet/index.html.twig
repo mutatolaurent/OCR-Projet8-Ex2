@@ -18,20 +18,24 @@
                         <a href="{{ path('app_projet_show', {id: projet.id}) }}">
                         <h2>{{ projet.nom }}</h2>
                         </a>
-                        <div class="card-project-icons">
-                            <a href="{{ path('app_projet_edit', {id: projet.id}) }}"><i class="fa-solid fa-pen"></i></a>
-                            <a href="{{ path('app_projet_archive', {id: projet.id}) }}" data-turbo-prefetch="false"><i class="fa-solid fa-trash"></i></a>
-                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="card-project-icons">
+                                <a href="{{ path('app_projet_edit', {id: projet.id}) }}"><i class="fa-solid fa-pen"></i></a>
+                                <a href="{{ path('app_projet_archive', {id: projet.id}) }}" data-turbo-prefetch="false"><i class="fa-solid fa-trash"></i></a>
+                            </div>
+                        {% endif %}
                     </article>
                 {% else %}
                     <p>Aucun projet trouvé</p>
                 {% endfor %}
-                <article class="card-project">
-                    <a href="{{ path('app_projet_add')}}">
-                        <i class="fa-solid fa-circle-plus add-project-icon"></i>
-                        <h2>Ajouter un projet</h2>
-                    </a>
-                </article>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <article class="card-project">
+                        <a href="{{ path('app_projet_add')}}">
+                            <i class="fa-solid fa-circle-plus add-project-icon"></i>
+                            <h2>Ajouter un projet</h2>
+                        </a>
+                    </article>
+                {% endif %}
             </div>
         </div>
     </main>

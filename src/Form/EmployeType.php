@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\CallbackTransformer;
 
 class EmployeType extends AbstractType
 {
@@ -30,12 +32,32 @@ class EmployeType extends AbstractType
             ->add('dateEntree', DateType::class, [
                 'widget' => 'single_text',
             ])
-            // ->add('projets', EntityType::class, [
-            //     'class' => Projet::class,
-            //     'choice_label' => 'id',
-            //     'multiple' => true,
-            // ])
+            ->add('roles', ChoiceType::class, [
+                'label' => 'Rôle',
+
+                // On définit les choix : 'Ce qui est affiché' => 'La valeur en BDD (le rôle Symfony)'
+                'choices' => [
+                    'Collaborateur' => 'ROLE_USER',
+                    'Chef de projet' => 'ROLE_ADMIN',
+                ],
+
+                'expanded' => false, // C'est maintenant une liste déroulante classique !
+                'multiple' => false,
+
+            ])
         ;
+        // LE DATA TRANSFORMER (Le traducteur magique entre le formulaire et la BDD)
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                // PHP vers Formulaire : On extrait le rôle du tableau pour l'afficher dans le select
+                function (array $rolesAsArray): string {
+                    return count($rolesAsArray) ? $rolesAsArray[0] : 'ROLE_USER';
+                },
+                // Formulaire vers PHP : On englobe la chaîne sélectionnée dans un tableau pour l'entité
+                function (string $roleAsString): array {
+                    return [$roleAsString];
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

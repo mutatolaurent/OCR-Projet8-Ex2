@@ -595,9 +595,9 @@ table#team-container th {
     padding-bottom: 35px;
 }
 
-table#team-container tbody tr:nth-child(2n + 1) td {
+/* table#team-container tbody tr:nth-child(2n + 1) td {
     background: #ffffff;
-}
+} */
 
 table#team-container tr td {
     border-bottom: 1px solid #d9d9d9;
@@ -635,12 +635,12 @@ table#team-container tr td {
     color: #202020;
 }
 
-table#team-container tbody tr td:last-child {
+/* table#team-container tbody tr td:last-child {
     display: flex;
     align-items: center;
     gap: 35px;
     max-width: 315px;
-}
+} */
 
 a.button-edit-team {
     background: #1f5b50;

@@ -12,17 +12,11 @@ use App\Enum\StatutTache;
 use App\Entity\Projet;
 use App\Form\TacheType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[isGranted('IS_AUTHENTICATED')]
 final class TacheController extends AbstractController
 {
-    #[Route('/tache', name: 'app_tache')]
-    public function index(): Response
-    {
-        return $this->render('tache/index.html.twig', [
-            'controller_name' => 'TacheController',
-        ]);
-    }
-
     #[Route('/tache/{id}/edit', name: 'app_tache_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(?Tache $tache, Request $request, EntityManagerInterface $entityManager): Response
     {

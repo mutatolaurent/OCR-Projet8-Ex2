@@ -9,7 +9,7 @@
     <div id="title-page">
         <div class="flex-header">
             <h1>Équipe</h1>
-                <a class="button" href="{{ path('app_employe_add') }}">Ajouter</a>
+            {# <a class="button" href="{{ path('app_employe_add') }}">Ajouter</a> #}
         </div>
     </div>
 
@@ -18,39 +18,56 @@
     <table id="team-container">
         <thead>
             <tr>
-            <th>Prénom, Nom</th>
-            <th>Statut</th>
-            <th>Actions</th>
+                <th>Prénom, Nom, Email</th>
+                <th>Statut</th>
+                <th>Rôle</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Actions</th>
+                    <th></th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for employe in employes %}
                 <tr>
-                <td>
-                    <div class="employee-infos">
-                        <div class="employee-avatar">
-                            {% set initialePrenom = employe.prenom|slice(0, 1)|upper %}
-                            {% set initialeNom = employe.nom|slice(0, 1)|upper %}
-                            {{ initialePrenom }}{{ initialeNom }}
+                    <td>
+                        <div class="employee-infos">
+                            <div class="employee-avatar">
+                                {% set initialePrenom = employe.prenom|slice(0, 1)|upper %}
+                                {% set initialeNom = employe.nom|slice(0, 1)|upper %}
+                                {{ initialePrenom }}{{ initialeNom }}
+                            </div>
+                            <div class="employee-coords">
+                                <strong>{{ employe.prenom }} {{ employe.nom }}</strong>
+                                <span>{{ employe.email }}</span>
+                            </div>
                         </div>
-                        <div class="employee-coords">
-                            <strong>{{ employe.prenom }} {{ employe.nom }}</strong>
-                            <span>{{ employe.email }}</span>
-                        </div>
-                    </div>
-                </td>
-                <td>{{ employe.statut.value|upper }} </td>
-                <td> 
-                    <a class="button button-edit-team" href="{{ path('app_employe_edit', {id: employe.id} ) }}">
-                    Éditer
-                    </a>
-                    <a class="delete-team" href="{{ path('app_employe_remove', {id: employe.id} ) }}">
-                    Supprimer
-                    </a>
-                </td>
+                    </td>
+                    <td>{{ employe.statut.value|upper }}</td>
+                    <td>
+                        {% if 'ROLE_ADMIN' in employe.roles %}
+                            <span>Chef de projet</span>
+                        {% else %}
+                            <span>Collaborateur</span>
+                        {% endif %}
+                    </td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a class="button button-edit-team" href="{{ path('app_employe_edit', {id: employe.id} ) }}">
+                        Éditer
+                        </a>
+                    </td>
+                    <td>
+                        <a class="delete-team" href="{{ path('app_employe_remove', {id: employe.id} ) }}">
+                        Supprimer
+                        </a>
+                    </td>
+                    {% endif %}
                 </tr>
             {% else %}
-                <p>Aucun employé trouvé</p>
+                <tr>
+                    <td colspan="3">Aucun employé trouvé</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

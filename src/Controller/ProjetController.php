@@ -12,20 +12,40 @@ use App\Repository\ProjetRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\SecurityBundle\Security;
 
+#[isGranted('IS_AUTHENTICATED')]
 final class ProjetController extends AbstractController
 {
+    // Injection du service Security pour gérer les autorisations et récupérer l'utilisateur connecté
+    public function __construct(private Security $security)
+    {
+    }
+
+    // Route pour la page d'accueil qui liste les projets
     #[Route('/', name: 'app_projet_index')]
     public function index(ProjetRepository $repository): Response
     {
         // On ne récupère que les projets qui ne sont pas archivés et on tri dans l'ordre des plus récents
-        $projets = $repository->findBy(['archive' => false], ['id' => 'DESC']);
+        //$projets = $repository->findBy(['archive' => false], ['id' => 'DESC']);
+
+        //  Si l'utilisateur connecté n'est pas un administrateur, on filtre les projets pour ne montrer que ceux auxquels il est associé
+        if (!$this->security->isGranted('ROLE_ADMIN')) {
+            $user = $this->security->getUser();
+            $projets = $repository->findNonArchivedProjectsForEmploye($user);
+        } else {
+
+            // Si l'utilisateur est un administrateur, on récupère tous les projets non archivés
+            $projets = $repository->findBy(['archive' => false], ['id' => 'DESC']);
+        }
 
         return $this->render('projet/index.html.twig', [
             'projets' => $projets,
         ]);
     }
 
+    // Route pour afficher les détails d'un projet spécifique
     #[Route('/projet/{id}', name: 'app_projet_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(?Projet $projet): Response
     {
@@ -40,6 +60,8 @@ final class ProjetController extends AbstractController
         ]);
     }
 
+    // Route pour ajouter un nouveau projet (accessible uniquement aux administrateurs)
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projet/ajout', name: 'app_projet_add', methods: ['GET','POST'])]
     public function add(?Projet $projet, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -66,6 +88,8 @@ final class ProjetController extends AbstractController
         ]);
     }
 
+    // Route pour modifier un projet existant (accessible uniquement aux administrateurs)
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projet/{id}/edit', name: 'app_projet_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(?Projet $projet, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -132,6 +156,8 @@ final class ProjetController extends AbstractController
         ]);
     }
 
+    // Route pour archiver un projet (accessible uniquement aux administrateurs)
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projet/{id}/archiver', name: 'app_projet_archive', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function archive(?Projet $projet, Request $request, EntityManagerInterface $manager): Response
     {
