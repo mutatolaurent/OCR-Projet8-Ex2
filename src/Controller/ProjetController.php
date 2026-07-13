@@ -55,6 +55,9 @@ final class ProjetController extends AbstractController
             throw new NotFoundHttpException("Le projet demandé n'existe pas.");
         }
 
+        // Vérification des droits d'accès pour l'utilisateur connecté
+        $this->denyAccessUnlessGrantedProjectEmploye($projet);
+
         return $this->render('projet/show.html.twig', [
             'projet' => $projet,
         ]);
@@ -199,4 +202,19 @@ final class ProjetController extends AbstractController
         return $this->redirectToRoute('app_projet_index');
     }
 
+    // Méthode mutualisée pour vérifier si l'utilisateur connecté a le droit d'accéder à un projet donné
+    private function denyAccessUnlessGrantedProjectEmploye(Projet $projet): void
+    {
+        // Si l'utilisateur est ADMIN, il a accès à tout
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        // Si l'utilisateur n'est pas ADMIN, on vérifie s'il est affecté au projet
+        $currentUser = $this->security->getUser();
+
+        if (!$currentUser || !$projet->getEmployes()->contains($currentUser)) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à ce projet.');
+        }
+    }
 }

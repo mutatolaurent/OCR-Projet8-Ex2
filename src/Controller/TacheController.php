@@ -13,10 +13,17 @@ use App\Entity\Projet;
 use App\Form\TacheType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[isGranted('IS_AUTHENTICATED')]
 final class TacheController extends AbstractController
 {
+    // Injection du service Security pour gérer les autorisations et récupérer l'utilisateur connecté
+    public function __construct(private Security $security)
+    {
+    }
+
+    // Route pour éditer une tâche spécifique
     #[Route('/tache/{id}/edit', name: 'app_tache_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(?Tache $tache, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -26,9 +33,12 @@ final class TacheController extends AbstractController
             throw new NotFoundHttpException("La tâche demandée n'existe pas.");
         }
 
+        $this->denyAccessUnlessGrantedProjectEmploye($tache->getProjet());
+
         return $this->handleForm($tache, $request, $entityManager);
     }
 
+    // Route pour ajouter une tâche à un projet spécifique, avec un statut par défaut optionnel
     #[Route('/projet/{id}/tache/ajout/{default_status}', name: 'app_tache_add', requirements: ['id' => '\d+'], defaults: ['default_status' => null], methods: ['GET', 'POST'])]
     public function add(?Projet $projet, ?string $default_status, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -37,6 +47,8 @@ final class TacheController extends AbstractController
         if (!$projet) {
             throw new NotFoundHttpException("Le projet demandé n'existe pas.");
         }
+
+        $this->denyAccessUnlessGrantedProjectEmploye($projet);
 
         $tache = new Tache();
         $tache->setProjet($projet);
@@ -56,6 +68,7 @@ final class TacheController extends AbstractController
         return $this->handleForm($tache, $request, $entityManager);
     }
 
+    // Route pour supprimer une tâche spécifique
     #[Route('/tache/{id}/supprimer', name: 'app_tache_remove', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function remove(?Tache $tache, EntityManagerInterface $manager): Response
     {
@@ -64,6 +77,8 @@ final class TacheController extends AbstractController
         if (!$tache) {
             return $this->redirectToRoute('app_projet_index');
         }
+
+        $this->denyAccessUnlessGrantedProjectEmploye($tache->getProjet());
 
         // On récupère l'ID du projet auquel la tâche est associée avant de supprimer la tâche pour pouvoir rediriger vers la page du projet après suppression
         $projetId = $tache->getProjet()->getId();
@@ -80,6 +95,7 @@ final class TacheController extends AbstractController
     }
 
     // LA MÉTHODE MUTUALISÉE POUR LE FORMULAIRE
+    // Cette méthode est utilisée à la fois pour l'ajout et l'édition d'une tâche
     private function handleForm(Tache $tache, Request $request, EntityManagerInterface $entityManager): Response
     {
         $isEdit = $tache->getId() !== null;
@@ -106,4 +122,18 @@ final class TacheController extends AbstractController
         ]);
     }
 
+    private function denyAccessUnlessGrantedProjectEmploye(Projet $projet): void
+    {
+        // Si l'utilisateur est ADMIN, il a accès à tout
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        // Si l'utilisateur n'est pas ADMIN, on vérifie s'il est affecté au projet
+        $currentUser = $this->security->getUser();
+
+        if (!$currentUser || !$projet->getEmployes()->contains($currentUser)) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à ce projet.');
+        }
+    }
 }
