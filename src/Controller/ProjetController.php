@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Security\Voter\ProjetVoter;
 
 #[isGranted('IS_AUTHENTICATED')]
 final class ProjetController extends AbstractController
@@ -34,11 +35,15 @@ final class ProjetController extends AbstractController
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             $user = $this->security->getUser();
             $projets = $repository->findNonArchivedProjectsForEmploye($user);
-        } else {
 
-            // Si l'utilisateur est un administrateur, on récupère tous les projets non archivés
-            $projets = $repository->findBy(['archive' => false], ['id' => 'DESC']);
+            return $this->render('projet/index.html.twig', [
+                'projets' => $projets,
+            ]);
+
         }
+
+        // Si l'utilisateur est un administrateur, on récupère tous les projets non archivés
+        $projets = $repository->findBy(['archive' => false], ['id' => 'DESC']);
 
         return $this->render('projet/index.html.twig', [
             'projets' => $projets,
@@ -56,7 +61,8 @@ final class ProjetController extends AbstractController
         }
 
         // Vérification des droits d'accès pour l'utilisateur connecté
-        $this->denyAccessUnlessGrantedProjectEmploye($projet);
+        // $this->denyAccessUnlessGrantedProjectEmploye($projet);
+        $this->denyAccessUnlessGranted(ProjetVoter::ACCESS, $projet, "Vous n'êtes pas autorisé à accéder à ce projet.");
 
         return $this->render('projet/show.html.twig', [
             'projet' => $projet,

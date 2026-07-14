@@ -14,6 +14,7 @@ use App\Form\TacheType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Security\Voter\ProjetVoter;
 
 #[isGranted('IS_AUTHENTICATED')]
 final class TacheController extends AbstractController
@@ -33,7 +34,9 @@ final class TacheController extends AbstractController
             throw new NotFoundHttpException("La tâche demandée n'existe pas.");
         }
 
-        $this->denyAccessUnlessGrantedProjectEmploye($tache->getProjet());
+        // $this->denyAccessUnlessGrantedProjectEmploye($tache->getProjet());
+        // On utilise le Voter de manière native
+        $this->denyAccessUnlessGranted(ProjetVoter::ACCESS, $tache->getProjet(), "Vous n'êtes pas autorisé à accéder à ce projet.");
 
         return $this->handleForm($tache, $request, $entityManager);
     }
@@ -48,7 +51,8 @@ final class TacheController extends AbstractController
             throw new NotFoundHttpException("Le projet demandé n'existe pas.");
         }
 
-        $this->denyAccessUnlessGrantedProjectEmploye($projet);
+        // $this->denyAccessUnlessGrantedProjectEmploye($projet);
+        $this->denyAccessUnlessGranted(ProjetVoter::ACCESS, $projet, "Vous n'êtes pas autorisé à accéder à ce projet.");
 
         $tache = new Tache();
         $tache->setProjet($projet);
@@ -78,7 +82,8 @@ final class TacheController extends AbstractController
             return $this->redirectToRoute('app_projet_index');
         }
 
-        $this->denyAccessUnlessGrantedProjectEmploye($tache->getProjet());
+        // $this->denyAccessUnlessGrantedProjectEmploye($tache->getProjet());
+        $this->denyAccessUnlessGranted(ProjetVoter::ACCESS, $tache->getProjet(), "Vous n'êtes pas autorisé à accéder à ce projet.");
 
         // On récupère l'ID du projet auquel la tâche est associée avant de supprimer la tâche pour pouvoir rediriger vers la page du projet après suppression
         $projetId = $tache->getProjet()->getId();
