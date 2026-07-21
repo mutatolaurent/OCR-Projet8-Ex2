@@ -1,0 +1,48 @@
+{% extends 'base-logout.html.twig' %}
+
+{% block title %}Vérification en deux étapes{% endblock %}
+
+{% block body %}
+<main class="logout-main">
+    <div class="connexion-box">
+        <h1>Code de vérification</h1>
+
+        {# {% if error %}
+            <div class="alert-fail">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %} #}
+
+        {% if error ?? false %}
+            <div class="alert-fail">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+
+
+        <p>
+            Saisissez le code à 6 chiffres affiché dans votre application Google Authenticator.
+        </p>
+
+        <form action="{{ path('2fa_login_check') }}" method="post">
+            <label for="_auth_code">Code de vérification</label>
+            <input type="text"
+                id="_auth_code"
+                name="_auth_code"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                required
+                autofocus>
+
+            <input type="hidden"
+                name="_csrf_token"
+                value="{{ csrf_token('two_factor') }}">
+
+            <button class="button button-1 button-1-margintop" type="submit">
+                Valider
+            </button>
+        </form>
+    </div>
+</main>
+{% endblock %}

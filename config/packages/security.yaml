@@ -28,6 +28,22 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: app_accueil
+            login_throttling:
+                max_attempts: 3
+                interval: "10 minutes"
+
+            two_factor:
+                auth_form_path: /2fa # route 2FA (formulaire)
+                check_path: /2fa_check # route 2FA (validation)
+                post_only: true
+                auth_code_parameter_name: _auth_code
+                enable_csrf: true
+                csrf_parameter: _csrf_token
+                csrf_token_id: two_factor
+                multi_factor: false
+                default_target_path: app_projet_index # route après succès complet (2FA OK)
+                #     prepare_on_login: true
+                #     prepare_on_access_denied: true
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -39,6 +55,9 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        # - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:

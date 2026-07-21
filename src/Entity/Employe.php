@@ -10,10 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 
 #[ORM\Entity(repositoryClass: EmployeRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class Employe implements UserInterface, PasswordAuthenticatedUserInterface
+class Employe implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -62,6 +63,9 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Tache::class, mappedBy: 'Employe')]
     private Collection $taches;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $googleAuthenticatorSecret = null;
 
     public function __construct()
     {
@@ -251,6 +255,31 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
                 $tach->setEmploye(null);
             }
         }
+
+        return $this;
+    }
+
+    // Méthodes requises par GoogleTwoFactorInterface
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return null !== $this->googleAuthenticatorSecret;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        // On utilise l'email comme identifiant pour Google Authenticator
+        return (string) $this->email;
+    }
+
+    public function getGoogleAuthenticatorSecret(): ?string
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret(?string $secret): static
+    {
+        $this->googleAuthenticatorSecret = $secret;
 
         return $this;
     }

@@ -1,0 +1,27 @@
+{# templates/security/enable_2fa.html.twig #}
+{% extends 'base-logout.html.twig' %}
+
+{% block title %}Activer la double authentification{% endblock %}
+
+{% block body %}
+<main class="logout-main">
+    <div class="connexion-box">
+        <h1>Activer la double authentification</h1>
+
+        <p>
+            Scannez ce QR code avec l'application Google Authenticator, ou saisissez le code secret manuellement.
+        </p>
+
+        <div class="qr-code">
+            <img src="{{ qrCodeDataUri }}" alt="QR code Google Authenticator">
+        </div>
+
+        <p><strong>Code secret :</strong> {{ secret }}</p>
+
+        <p>
+            Une fois le compte ajouté dans Google Authenticator, déconnectez-vous puis reconnectez-vous.
+            Il vous sera demandé un code à 6 chiffres.
+        </p>
+    </div>
+</main>
+{% endblock %}

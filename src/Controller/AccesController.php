@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Employe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Entity\Employe;
 use App\Repository\EmployeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\InscriptionType;
 use App\Enum\ContratEmploye;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Bundle\SecurityBundle\Security; // 1. IMPORT DU SERVICE SECURITY
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class AccesController extends AbstractController
 {
