@@ -13,13 +13,15 @@
             </div>
         {% endif %} #}
 
-        {% if error ?? false %}
+        {% if authenticationError is defined and authenticationError %}
             <div class="alert-fail">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
+                {% if authenticationError.messageKey is defined %}
+                    {{ authenticationError.messageKey|trans(authenticationError.messageData, 'security') }}
+                {% else %}
+                    {{ authenticationError|trans({}, 'security') }}
+                {% endif %}
             </div>
         {% endif %}
-
-
 
         <p>
             Saisissez le code à 6 chiffres affiché dans votre application Google Authenticator.
@@ -32,6 +34,7 @@
                 name="_auth_code"
                 inputmode="numeric"
                 pattern="[0-9]*"
+                autocomplete="one-time-code"
                 required
                 autofocus>
 

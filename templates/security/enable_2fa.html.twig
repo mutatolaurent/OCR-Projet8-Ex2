@@ -19,7 +19,7 @@
         <p><strong>Code secret :</strong> {{ secret }}</p>
 
         <p>
-            Une fois le compte ajouté dans Google Authenticator, déconnectez-vous puis reconnectez-vous.
+            Une fois le compte ajouté dans Google Authenticator, <a href="{{ path('app_logout') }}">déconnectez-vous</a> puis reconnectez-vous.
             Il vous sera demandé un code à 6 chiffres.
         </p>
     </div>
