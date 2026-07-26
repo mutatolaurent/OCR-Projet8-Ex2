@@ -4,10 +4,19 @@ scheb_two_factor:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
         - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
 
-    google:
-        enabled: true # If Google Authenticator should be enabled, default false
-        server_name: "Tasklinker V2 " # Server name used in QR code
-        issuer: "LS Company V2" # Issuer name used in QR code
-        digits: 6 # Number of digits in authentication code
-        leeway: 10 # Acceptable time drift in seconds, must be less or equal than 30 seconds
-        template: security/2fa_form.html.twig # Template used to render the authentication form
+    # Configuration pour le 2fa avec Google Authenticator
+    # google:
+    #     enabled: true # If Google Authenticator should be enabled, default false
+    #     server_name: "Tasklinker V2 " # Server name used in QR code
+    #     issuer: "LS Company V2" # Issuer name used in QR code
+    #     digits: 6 # Number of digits in authentication code
+    #     leeway: 10 # Acceptable time drift in seconds, must be less or equal than 30 seconds
+    #     template: security/2fa_form.html.twig # Template used to render the authentication form
+
+    # Configuration pour le 2fa avec email
+    email:
+        enabled: true
+        sender_email: "no-reply@localhost"
+        sender_name: "Lolo"
+        digits: 6
+        template: "security/2fa_form_email.html.twig"

@@ -10,7 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+// A UTILISER POUR GOOGLE AUTHENTICATOR
+// use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+// A UTILISER POUR 2FA par EMAIL
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
 #[ORM\Entity(repositoryClass: EmployeRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -66,6 +69,13 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface, TwoF
 
     #[ORM\Column(nullable: true)]
     private ?string $googleAuthenticatorSecret = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $emailAuthCode = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $emailAuthCodeExpiry = null;
+
 
     public function __construct()
     {
@@ -261,26 +271,57 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface, TwoF
 
     // Méthodes requises par GoogleTwoFactorInterface
 
-    public function isGoogleAuthenticatorEnabled(): bool
+    // public function isGoogleAuthenticatorEnabled(): bool
+    // {
+    //     return null !== $this->googleAuthenticatorSecret;
+    // }
+
+    // public function getGoogleAuthenticatorUsername(): string
+    // {
+    //     // On utilise l'email comme identifiant pour Google Authenticator
+    //     return (string) $this->email;
+    // }
+
+    // public function getGoogleAuthenticatorSecret(): ?string
+    // {
+    //     return $this->googleAuthenticatorSecret;
+    // }
+
+    // public function setGoogleAuthenticatorSecret(?string $secret): static
+    // {
+    //     $this->googleAuthenticatorSecret = $secret;
+
+    //     return $this;
+    // }
+
+    public function isEmailAuthEnabled(): bool
     {
-        return null !== $this->googleAuthenticatorSecret;
+        return true;
     }
 
-    public function getGoogleAuthenticatorUsername(): string
+    public function getEmailAuthRecipient(): string
     {
-        // On utilise l'email comme identifiant pour Google Authenticator
-        return (string) $this->email;
+        return $this->email;
     }
 
-    public function getGoogleAuthenticatorSecret(): ?string
+    public function getEmailAuthCode(): ?string
     {
-        return $this->googleAuthenticatorSecret;
+        return $this->emailAuthCode;
     }
 
-    public function setGoogleAuthenticatorSecret(?string $secret): static
+    public function setEmailAuthCode(string $code): void
     {
-        $this->googleAuthenticatorSecret = $secret;
-
-        return $this;
+        $this->emailAuthCode = $code;
     }
+
+    public function getEmailAuthCodeExpiry(): ?\DateTimeInterface
+    {
+        return $this->emailAuthCodeExpiry;
+    }
+
+    public function setEmailAuthCodeExpiry(\DateTimeInterface $expiry): void
+    {
+        $this->emailAuthCodeExpiry = $expiry;
+    }
+
 }

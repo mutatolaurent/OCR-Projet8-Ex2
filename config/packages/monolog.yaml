@@ -2,6 +2,9 @@ monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
         - routing # On déclare notre canal personnalisé ici
+        - scheb_two_factor
+        - security
+        - mailer
 
 when@dev:
     monolog:
@@ -13,6 +16,24 @@ when@dev:
                 level: info
                 channels: ["routing"]
                 max_files: 30
+            # LOGS DU BUNDLE 2FA
+            scheb_two_factor:
+                type: stream
+                path: "%kernel.logs_dir%/scheb_two_factor.log"
+                level: debug
+                channels: ["scheb_two_factor"]
+            # LOGS DE SÉCURITÉ SYMFONY
+            security:
+                type: stream
+                path: "%kernel.logs_dir%/security.log"
+                level: debug
+                channels: ["security"]
+            # LOGS DU MAILER
+            mailer:
+                type: stream
+                path: "%kernel.logs_dir%/mailer.log"
+                level: debug
+                channels: ["mailer"]
             main:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"

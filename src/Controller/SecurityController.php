@@ -15,6 +15,8 @@ use Endroid\QrCode\Writer\SvgWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class SecurityController extends AbstractController
 {
@@ -89,4 +91,20 @@ class SecurityController extends AbstractController
             'qrCodeDataUri' => $qrCodeDataUri,
         ]);
     }
+
+    
+    #[Route('/test-email')]
+    public function testEmail(MailerInterface $mailer)
+    {
+        $email = (new Email())
+            ->from('mon.email@gmail.com')
+            ->to('mon.email@gmail.com')
+            ->subject('Test SMTP Gmail')
+            ->text('Ceci est un test.');
+
+        $mailer->send($email);
+
+        return new Response('Email envoyé !');
+    }
+
 }

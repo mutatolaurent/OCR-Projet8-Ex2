@@ -190,7 +190,8 @@ main.logout-main {
 }
 
 .alert-fail {
-    color: red;
+    color: white;
+    background-color: red;
     text-align: center;
     font-family: Manrope;
     font-size: 14px;

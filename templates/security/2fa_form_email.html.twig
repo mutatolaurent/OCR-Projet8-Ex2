@@ -1,0 +1,35 @@
+{% extends 'base-logout.html.twig' %}
+
+{% block body %}
+<main class="logout-main">
+    <div class="connexion-box">
+        <h1>Vérification en deux étapes</h1>
+        <p>Un code vous a été envoyé par email. Veuillez le saisir ci-dessous :</p>
+        {% if authenticationError is defined and authenticationError %}
+            <div class="alert-fail">
+                {% if authenticationError.messageKey is defined %}
+                    {{ authenticationError.messageKey|trans(authenticationError.messageData, 'security') }}
+                {% else %}
+                    {{ authenticationError|trans({}, 'security') }}
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <form action="{{ path('2fa_login_check') }}" method="post">
+            <label for="auth_code">Code reçu par email</label>
+            <input type="text" 
+                id="auth_code" 
+                name="_auth_code" 
+                inputmode="numeric"
+                pattern="[0-9]*"
+                autocomplete="one-time-code"
+                required 
+                autofocus>
+
+            <button class="button button-1 button-1-margintop" type="submit">
+                Valider
+            </button>
+        </form>
+    </div>
+</main>
+{% endblock %}

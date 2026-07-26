@@ -9,3 +9,9 @@
 
 controllers:
     resource: routing.controllers
+
+# 2fa_login:
+#     path: /2fa/login
+
+# 2fa_login_check:
+#     path: /2fa/login_check
